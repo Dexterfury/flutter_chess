@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -293,8 +291,10 @@ class GameProvider extends ChangeNotifier {
       pauseWhitesTimer();
       pauseBlacksTimer();
 
-      // cancel the gameStreamsubscription
-      gameStreamSubScreiption!.cancel();
+      // cancel the gameStreamsubscription if its not null
+      if (gameStreamSubScreiption != null) {
+        gameStreamSubScreiption!.cancel();
+      }
 
       // show game over dialog
       if (context.mounted) {
