@@ -25,12 +25,12 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   void initState() {
-    stockfish = Stockfish();
+    //stockfish = Stockfish();
     final gameProvider = context.read<GameProvider>();
     gameProvider.resetGame(newGame: false);
 
     if (mounted) {
-      letOtherPlayerPlayFirst();
+      //letOtherPlayerPlayFirst();
     }
     super.initState();
   }
@@ -284,8 +284,10 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     final gameProvider = context.read<GameProvider>();
     final userModel = context.read<AuthenticationProvider>().userModel;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didpop) async {
+        if (didpop) return;
         bool? leave = await _showExitConfirmDialog(context);
         if (leave != null && leave) {
           stockfish.stdin = UCICommands.stop;
@@ -296,7 +298,6 @@ class _GameScreenState extends State<GameScreen> {
                 context, Constants.homeScreen, (route) => false);
           });
         }
-        return false;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -392,7 +393,7 @@ class _GameScreenState extends State<GameScreen> {
                     whitesTimer,
                     style: const TextStyle(fontSize: 16),
                   ),
-                )
+                ),
               ],
             );
           },
