@@ -52,21 +52,38 @@ class GameLevelRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final capitalizedTitle = title[0].toUpperCase() + title.substring(1);
-    return Expanded(
-      child: RadioListTile<GameDifficulty>(
-        title: Text(
-          capitalizedTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+    return Material(
+      elevation: 5,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(255, 114, 81, 62),
+              Color.fromARGB(
+                  255, 199, 149, 100), // Change this to your desired colors
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(2.0),
         ),
-        value: value,
-        dense: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+        child: Expanded(
+          child: RadioListTile<GameDifficulty>(
+            title: Text(
+              capitalizedTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            value: value,
+            dense: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding: EdgeInsets.zero,
+            tileColor: Colors.grey[300],
+            groupValue: groupValue,
+            onChanged: onChanged,
+          ),
         ),
-        contentPadding: EdgeInsets.zero,
-        tileColor: Colors.grey[300],
-        groupValue: groupValue,
-        onChanged: onChanged,
       ),
     );
   }

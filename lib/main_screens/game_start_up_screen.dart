@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess/constants.dart';
-import 'package:flutter_chess/providers/authentication_provider.dart';
 import 'package:flutter_chess/providers/game_provider.dart';
 import 'package:flutter_chess/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class GameStartUpScreen extends StatefulWidget {
   const GameStartUpScreen({
-    super.key,
+    Key? key,
     required this.isCustomTime,
     required this.gameTime,
-  });
+  }) : super(key: key);
 
   final bool isCustomTime;
   final String gameTime;
@@ -20,28 +19,41 @@ class GameStartUpScreen extends StatefulWidget {
 }
 
 class _GameStartUpScreenState extends State<GameStartUpScreen> {
-  PlayerColor playerColorGroup = PlayerColor.white;
-  GameDifficulty gameLevelGroup = GameDifficulty.easy;
+  int whiteTimeInMinutes = 0;
+  int blackTimeInMinutes = 0;
 
-  int whiteTimeInMenutes = 0;
-  int blackTimeInMenutes = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 248, 244, 225),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          'Setup Game',
-          style: TextStyle(color: Colors.white),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 248, 244, 225),
+        title: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Game Setup',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: const Color.fromARGB(255, 76, 50, 35),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Spacer(),
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const SettingsScreen(),
+                  //   ),
+                  // );
+                },
+              ),
+            ],
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
         ),
       ),
       body: Consumer<GameProvider>(
@@ -49,10 +61,11 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // radioListTile
+                const SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
@@ -67,23 +80,27 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
                     ),
                     widget.isCustomTime
                         ? BuildCustomTime(
-                            time: whiteTimeInMenutes.toString(),
+                            time: whiteTimeInMinutes.toString(),
                             onLeftArrowCricked: () {
                               setState(() {
-                                whiteTimeInMenutes--;
+                                whiteTimeInMinutes--;
                               });
                             },
                             onRightArrowCricked: () {
                               setState(() {
-                                whiteTimeInMenutes++;
+                                whiteTimeInMinutes++;
                               });
-                            })
+                            },
+                          )
                         : Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 0.5, color: Colors.black),
-                                borderRadius: BorderRadius.circular(10)),
+                              border: Border.all(
+                                width: 1,
+                                color: const Color.fromARGB(255, 76, 50, 35),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Center(
@@ -91,20 +108,18 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
                                   widget.gameTime,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
+                                    fontSize: 20,
+                                    color: Color.fromARGB(255, 76, 50, 35),
+                                  ),
                                 ),
                               ),
                             ),
-                          )
+                          ),
                   ],
                 ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
+                const SizedBox(height: 30),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5,
@@ -119,23 +134,27 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
                     ),
                     widget.isCustomTime
                         ? BuildCustomTime(
-                            time: blackTimeInMenutes.toString(),
+                            time: blackTimeInMinutes.toString(),
                             onLeftArrowCricked: () {
                               setState(() {
-                                blackTimeInMenutes--;
+                                blackTimeInMinutes--;
                               });
                             },
                             onRightArrowCricked: () {
                               setState(() {
-                                blackTimeInMenutes++;
+                                blackTimeInMinutes++;
                               });
-                            })
+                            },
+                          )
                         : Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 0.5, color: Colors.black),
-                                borderRadius: BorderRadius.circular(10)),
+                              border: Border.all(
+                                width: 1,
+                                color: const Color.fromARGB(255, 76, 50, 35),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Center(
@@ -143,82 +162,103 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
                                   widget.gameTime,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                      fontSize: 20, color: Colors.black),
+                                    fontSize: 20,
+                                    color: Color.fromARGB(255, 76, 50, 35),
+                                  ),
                                 ),
                               ),
                             ),
-                          )
+                          ),
                   ],
                 ),
-
+                const SizedBox(height: 40),
                 gameProvider.vsComputer
                     ? Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.all(20.0),
                             child: Text(
-                              'Game Difficult',
+                              'Game Difficulty',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 28,
+                                color: Color.fromARGB(255, 76, 50, 35),
                               ),
                             ),
                           ),
-                          Row(
+                          Column(
                             children: [
-                              GameLevelRadioButton(
-                                  title: GameDifficulty.easy.name,
-                                  value: GameDifficulty.easy,
-                                  groupValue: gameProvider.gameDifficulty,
-                                  onChanged: (value) {
-                                    gameProvider.setGameDifficulty(level: 1);
-                                  }),
-                              const SizedBox(
-                                width: 10,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: GameLevelRadioButton(
+                                    title: GameDifficulty.easy.name,
+                                    value: GameDifficulty.easy,
+                                    groupValue: gameProvider.gameDifficulty,
+                                    onChanged: (value) {
+                                      gameProvider.setGameDifficulty(level: 1);
+                                    }),
                               ),
-                              GameLevelRadioButton(
-                                  title: GameDifficulty.medium.name,
-                                  value: GameDifficulty.medium,
-                                  groupValue: gameProvider.gameDifficulty,
-                                  onChanged: (value) {
-                                    gameProvider.setGameDifficulty(level: 2);
-                                  }),
-                              const SizedBox(
-                                width: 10,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: GameLevelRadioButton(
+                                    title: GameDifficulty.easy.name,
+                                    value: GameDifficulty.easy,
+                                    groupValue: gameProvider.gameDifficulty,
+                                    onChanged: (value) {
+                                      gameProvider.setGameDifficulty(level: 1);
+                                    }),
                               ),
-                              GameLevelRadioButton(
-                                  title: GameDifficulty.hard.name,
-                                  value: GameDifficulty.hard,
-                                  groupValue: gameProvider.gameDifficulty,
-                                  onChanged: (value) {
-                                    gameProvider.setGameDifficulty(level: 3);
-                                  }),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: GameLevelRadioButton(
+                                    title: GameDifficulty.easy.name,
+                                    value: GameDifficulty.easy,
+                                    groupValue: gameProvider.gameDifficulty,
+                                    onChanged: (value) {
+                                      gameProvider.setGameDifficulty(level: 1);
+                                    }),
+                              ),
                             ],
                           ),
                         ],
                       )
                     : const SizedBox.shrink(),
-                const SizedBox(
-                  height: 20,
-                ),
-
+                const SizedBox(height: 20),
                 gameProvider.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const LinearProgressIndicator()
                     : ElevatedButton(
                         onPressed: () {
-                          // navigate to game screen
-                          playGame(gameProvider: gameProvider);
+                          //playGame(gameProvider: gameProvider);
                         },
-                        child: Text('Play'),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          backgroundColor:
+                              const Color.fromARGB(255, 76, 50, 35),
+                          textStyle: TextStyle(fontSize: 20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            'Play',
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 220, 204, 179),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
-
-                const SizedBox(
-                  height: 20,
-                ),
-
+                const SizedBox(height: 20),
                 gameProvider.vsComputer
                     ? const SizedBox.shrink()
-                    : Text(gameProvider.waitingText),
+                    : Text(
+                        gameProvider.waitingText,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 76, 50, 35),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ],
             ),
           );
@@ -227,89 +267,72 @@ class _GameStartUpScreenState extends State<GameStartUpScreen> {
     );
   }
 
-  void playGame({
-    required GameProvider gameProvider,
-  }) async {
-    final userModel = context.read<AuthenticationProvider>().userModel;
-    // check if is custome time
-    if (widget.isCustomTime) {
-      // check all timer are greater than 0
-      if (whiteTimeInMenutes <= 0 || blackTimeInMenutes <= 0) {
-        // show snackbar
-        showSnackBar(context: context, content: 'Time cannot be 0');
-        return;
-      }
+  // void playGame({required GameProvider gameProvider}) async {
+  //   final userModel = context.read<AuthenticationProvider>().userModel;
+  //   if (widget.isCustomTime) {
+  //     if (whiteTimeInMinutes <= 0 || blackTimeInMinutes <= 0) {
+  //       showSnackBar(context: context, content: 'Time cannot be 0');
+  //       return;
+  //     }
 
-      // 1. start loading dialog
-      gameProvider.setIsLoading(value: true);
+  //     gameProvider.setIsLoading(value: true);
 
-      // 2. save time and player color for both players
-      await gameProvider
-          .setGameTime(
-        newSavedWhitesTime: whiteTimeInMenutes.toString(),
-        newSavedBlacksTime: blackTimeInMenutes.toString(),
-      )
-          .whenComplete(() {
-        if (gameProvider.vsComputer) {
-          gameProvider.setIsLoading(value: false);
-          // 3. navigate to game screen
-          Navigator.pushNamed(context, Constants.gameScreen);
-        } else {
-          // search for players
-        }
-      });
-    } else {
-      // not custom time
-      // check if its incremental time
-      // get the value after the + sign
-      final String incrementalTime = widget.gameTime.split('+')[1];
+  //     await gameProvider
+  //         .setGameTime(
+  //       newSavedWhitesTime: whiteTimeInMinutes.toString(),
+  //       newSavedBlacksTime: blackTimeInMinutes.toString(),
+  //     )
+  //         .whenComplete(() {
+  //       if (gameProvider.vsComputer) {
+  //         gameProvider.setIsLoading(value: false);
+  //         Navigator.pushNamed(context, Constants.gameScreen);
+  //       } else {
+  //         // search for players
+  //       }
+  //     });
+  //   } else {
+  //     final String incrementalTime = widget.gameTime.split('+')[1];
+  //     final String gameTime = widget.gameTime.split('+')[0];
 
-      // get the value before the + sign
-      final String gameTime = widget.gameTime.split('+')[0];
+  //     if (incrementalTime != '0') {
+  //       gameProvider.setIncrementalValue(value: int.parse(incrementalTime));
+  //     }
 
-      // check if incremental is equal to 0
-      if (incrementalTime != '0') {
-        // save the incremental value
-        gameProvider.setIncrementalValue(value: int.parse(incrementalTime));
-      }
+  //     gameProvider.setIsLoading(value: true);
 
-      gameProvider.setIsLoading(value: true);
-
-      await gameProvider
-          .setGameTime(
-        newSavedWhitesTime: gameTime,
-        newSavedBlacksTime: gameTime,
-      )
-          .whenComplete(() {
-        if (gameProvider.vsComputer) {
-          gameProvider.setIsLoading(value: false);
-          // 3. navigate to game screen
-          Navigator.pushNamed(context, Constants.gameScreen);
-        } else {
-          // search for players
-          gameProvider.searchPlayer(
-              userModel: userModel!,
-              onSuccess: () {
-                if (gameProvider.waitingText == Constants.searchingPlayerText) {
-                  gameProvider.checkIfOpponentJoined(
-                    userModel: userModel,
-                    onSuccess: () {
-                      gameProvider.setIsLoading(value: false);
-                      Navigator.pushNamed(context, Constants.gameScreen);
-                    },
-                  );
-                } else {
-                  gameProvider.setIsLoading(value: false);
-                  // navigate to gameScreen
-                  Navigator.pushNamed(context, Constants.gameScreen);
-                }
-              },
-              onFail: (error) {
-                gameProvider.setIsLoading(value: false);
-                showSnackBar(context: context, content: error);
-              });
-        }
-      });
-    }
-  }
+  //     await gameProvider
+  //         .setGameTime(
+  //       newSavedWhitesTime: gameTime,
+  //       newSavedBlacksTime: gameTime,
+  //     )
+  //         .whenComplete(() {
+  //       if (gameProvider.vsComputer) {
+  //         gameProvider.setIsLoading(value: false);
+  //         Navigator.pushNamed(context, Constants.gameScreen);
+  //       } else {
+  //         gameProvider.searchPlayer(
+  //           userModel: userModel!,
+  //           onSuccess: () {
+  //             if (gameProvider.waitingText == Constants.searchingPlayerText) {
+  //               gameProvider.checkIfOpponentJoined(
+  //                 userModel: userModel,
+  //                 onSuccess: () {
+  //                   gameProvider.setIsLoading(value: false);
+  //                   Navigator.pushNamed(context, Constants.gameScreen);
+  //                 },
+  //               );
+  //             } else {
+  //               gameProvider.setIsLoading(value: false);
+  //               Navigator.pushNamed(context, Constants.gameScreen);
+  //             }
+  //           },
+  //           onFail: (error) {
+  //             gameProvider.setIsLoading(value: false);
+  //             showSnackBar(context: context, content: error);
+  //           },
+  //         );
+  //       }
+  //     });
+  //   }
+  // }
 }
