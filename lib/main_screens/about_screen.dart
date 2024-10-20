@@ -13,6 +13,5 @@ class _AboutScreenState extends State<AboutScreen> {
     return const Scaffold(
       body: Center(child: Text('About Screen')),
     );
-    ;
   }
 }
